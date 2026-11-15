@@ -9,12 +9,12 @@ description: >-
   multi-repository operations.
 ---
 
-# HAIFA skill: driving the `factory` CLI (aifactory 0.1.593)
+# HAIFA skill: driving the `factory` CLI (aifactory 0.1.614)
 
 This guide is generated from the installed code by `factory --skill`.
 Save its Markdown output as an agent's `SKILL.md`; `factory --skill --json`
 returns the same guide inside the JSON envelope. Compare `factory --version`
-with aifactory 0.1.593: whenever the version changes, regenerate this skill
+with aifactory 0.1.614: whenever the version changes, regenerate this skill
 with `factory --skill` and replace the saved copy.
 
 ## Prerequisites
@@ -1000,6 +1000,7 @@ serve the local dashboard (127.0.0.1 unless --host) and open it
 | `bundle_invalid` | 2 | upgrade: the bundle is missing, not a zip or lacks a file |
 | `busy` | 2 | dashboard API: another apply or base pull runs in this repository, or another global library write is running (HTTP 409) |
 | `chain_running` | 2 | the chain is still running and cannot be dismissed |
+| `checks_head_unconfirmed` | 2 | CI head could not be confirmed; the pull request stays open |
 | `checksum_mismatch` | 2 | upgrade: a file of the bundle differs from SHA256SUMS |
 | `clone_failed` | 2 | library clone: git clone failed |
 | `commit_failed` | 2 | backlog/config commit or a library write: the commit failed |
@@ -1014,6 +1015,7 @@ serve the local dashboard (127.0.0.1 unless --host) and open it
 | `dirty_worktree` | 2 | the worktree has uncommitted changes |
 | `download_failed` | 2 | upgrade: the bundle URL could not be downloaded |
 | `duplicate_id` | 2 | the id is ambiguous or already used in the backlog |
+| `edit_conflict` | 2 | task changed since the editor loaded it; reload and reconcile the preserved draft |
 | `editable_install` | 2 | upgrade: factory is an editable install from the repo; git pull |
 | `existing_config` | 2 | factory init: the repo has an sssf installation (adws/adw_sssf_config/); HAIFA does not take it over |
 | `fetch_failed` | 2 | git fetch failed |
@@ -1031,6 +1033,7 @@ serve the local dashboard (127.0.0.1 unless --host) and open it
 | `invalid_item` | 2 | library import: the item does not validate; see error.issues |
 | `invalid_library` | 2 | library clone: the remote has no commit or no valid library.yaml (format, id, name) |
 | `invalid_override` | 2 | task run --harness/--model/--thinking: unknown harness or thinking, or a model the harness rejects |
+| `invalid_pagination` | 2 | run page limit must be 1..500 and offset nonnegative |
 | `invalid_plan` | 2 | init --commit and config set/remove/move: the planned configuration does not load or a workflow fails its preflight; see error.issues |
 | `invalid_roles` | 2 | the role registry cannot be loaded; see error.issues |
 | `invalid_status` | 2 | the status (or status filter) is not allowed |
@@ -1077,6 +1080,7 @@ serve the local dashboard (127.0.0.1 unless --host) and open it
 | `port_in_use` | 2 | the dashboard port is already taken (factory obs --port N) |
 | `pr_exists` | 2 | task publish: the task (or the run's branch) already has a pull request |
 | `pr_not_open` | 2 | the task's pull request is not open |
+| `process_identity_unconfirmed` | 2 | process creation time is unavailable; stop the run in its original terminal |
 | `project_required` | 2 | learn accept: the project cannot be told from the lesson's runs; give --project |
 | `pull_failed` | 2 | config pull or library pull: git could not move the branch |
 | `push_failed` | 2 | git push failed |
