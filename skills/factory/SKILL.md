@@ -843,7 +843,7 @@ Import a folder (agent, skill, extension) or file (workflow) from under the user
 factory library clone [URL] [--seed-fallback] [--branch B] [--json]
 ```
 
-Clone the library from URL into the library path and return its status. Without URL the default library is cloned: $HAIFA_LIBRARY_URL, else https://github.com/janbkrejci/HAIFA-LIBRARY.git. An existing library is refused (library_exists), a failed clone is clone_failed and a remote without a valid library.yaml (format, id, name) is invalid_library; nothing is left behind. The remote is stored as origin without user and password. With --seed-fallback a failed clone (no network, no access) creates a local library from the seed instead (data.fallback true, with a warning).
+Clone the library from URL into the library path and return its status. Without URL the default library is cloned: $HAIFA_LIBRARY_URL, else https://github.com/janbkrejci/GIRO-LIBRARY.git. An existing library is refused (library_exists), a failed clone is clone_failed and a remote without a valid library.yaml (format, id, name) is invalid_library; nothing is left behind. The remote is stored as origin without user and password. With --seed-fallback a failed clone (no network, no access) creates a local library from the seed instead (data.fallback true, with a warning).
 
 - `URL`: git remote of the library (default: the HAIFA library)
 - `--seed-fallback`: when the clone fails, create a local library from the seed
@@ -1540,7 +1540,7 @@ accept: test.passed
    are checked). Resolve the `error` findings of `scope: machine` with their `fix`
    (Git identity, uv, the provider CLI, harness CLIs and their logins); see Check.
 2. A `library_missing` finding: `factory library clone --json` clones the default team
-   library (`$HAIFA_LIBRARY_URL`, else https://github.com/janbkrejci/HAIFA-LIBRARY.git);
+   library (`$HAIFA_LIBRARY_URL`, else https://github.com/janbkrejci/GIRO-LIBRARY.git);
    `factory library clone URL --json` another team library; `--seed-fallback` creates a
    local library from the seed when the clone fails (`data.fallback`, a warning). When this
    is the team's first machine with its own library, `factory library init [--name N]
