@@ -9,12 +9,12 @@ description: >-
   multi-repository operations.
 ---
 
-# GIRO skill: driving the `giro` CLI (aifactory 1.0.25)
+# GIRO skill: driving the `giro` CLI (aifactory 1.0.26)
 
 This guide is generated from the installed code by `giro --skill`.
 Save its Markdown output as an agent's `SKILL.md`; `giro --skill --json`
 returns the same guide inside the JSON envelope. Compare `giro --version`
-with aifactory 1.0.25: whenever the version changes, regenerate this skill
+with aifactory 1.0.26: whenever the version changes, regenerate this skill
 with `giro --skill` and replace the saved copy.
 
 Goal in. Release out.
@@ -1339,6 +1339,7 @@ Every key, including nested entries, is generated from the configuration model.
 | `remote` | `"origin"` | Git remote used for publishing and synchronizing base. |
 | `git_provider` | `"local"` | Hosting provider: local (no PR hosting), github (gh), or azure (az). |
 | `merge_strategy` | `"squash"` | Strategy for merging approved task pull requests. |
+| `wait_for_ci` | `true` | Wait up to 90 seconds for absent CI checks to appear before merging a task PR. False skips only this grace period; pending/failing checks and head verification remain enforced. |
 | `base_changes` | `"direct"` | How factory changes base (install, configuration, library items, backlog, uninstall): direct commits pushed to base, or pr, one pull request per change for a base that takes changes only through pull requests. |
 | `base_pr_merge` | `"manual"` | Pull requests of factory's own base changes: manual leaves them to a reviewer; auto approves them where the hosting lets the author (Azure DevOps), merges them at once (GitHub with --admin when the branch protection requires it) and fast-forwards the local base. |
 | `github_approver` | `null` | GitHub login that sends the approve review when a task PR is approved (git_provider github). It must be another account than the PR author, logged in to gh on the machine (gh auth login). Unset: no review is sent. |
