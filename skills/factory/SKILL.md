@@ -9,12 +9,12 @@ description: >-
   multi-repository operations.
 ---
 
-# GIRO skill: driving the `giro` CLI (aifactory 1.0.26)
+# GIRO skill: driving the `giro` CLI (aifactory 1.0.27)
 
 This guide is generated from the installed code by `giro --skill`.
 Save its Markdown output as an agent's `SKILL.md`; `giro --skill --json`
 returns the same guide inside the JSON envelope. Compare `giro --version`
-with aifactory 1.0.26: whenever the version changes, regenerate this skill
+with aifactory 1.0.27: whenever the version changes, regenerate this skill
 with `giro --skill` and replace the saved copy.
 
 Goal in. Release out.
@@ -704,7 +704,7 @@ Commit the uncommitted shared configuration (the paths of config status: config.
 giro config pull [--json] [--repo PATH]
 ```
 
-Fetch the remote base and fast-forward the local base to it when no run is in progress (run_in_progress). A diverged base (base_diverged), uncommitted changes in the checkout on base (dirty_base) or no remote (no_remote) are refused and nothing changes.
+Fetch the remote base and fast-forward the local base, also during active runs. The move is journaled for their guards. A diverged base (base_diverged), uncommitted changes in the checkout on base (dirty_base) or no remote (no_remote) are refused and nothing changes.
 
 - `--json`: print machine-readable JSON
 - `--repo` `PATH`: repository root with .factory/config.yaml (default: the current git repo)
@@ -1100,7 +1100,7 @@ serve the local dashboard (127.0.0.1 unless --host) and open it
 | `repo_settings_io` | 2 | local repository settings could not be read or saved |
 | `repo_settings_version` | 2 | local repository settings version is unsupported |
 | `run_already_paused` | 2 | the run is already pausing or paused (giro task pause) |
-| `run_in_progress` | 2 | a run with a live process is in progress in the repository (blocks base moves and config set/remove/move) |
+| `run_in_progress` | 2 | a run with a live process is in progress in the repository (blocks direct config commits and config set/remove/move, but not config pull) |
 | `run_not_archived` | 2 | only an archived run can be deleted |
 | `run_not_paused` | 2 | the run is not paused, there is nothing to resume |
 | `run_not_retryable` | 2 | task retry: the run is not failed, stopped or aborted, or it is a resolve or ci-fix run (after a ci-fix writes_needed: task approve --allow-writes) |
@@ -1111,6 +1111,7 @@ serve the local dashboard (127.0.0.1 unless --host) and open it
 | `self_ref` | 2 | a task cannot reference itself |
 | `skills_sync_failed` | 2 | giro skills sync could not write .agents/skills |
 | `stacked_on_open_pr` | 2 | the PR builds on a dependency's open PR; it is rebased onto base after that merge |
+| `status_failed` | 2 | the hosting status of a pull request could not be read |
 | `sync_on_base` | 2 | backlog sync refused to commit on the base branch |
 | `task_blocked` | 2 | the task has unmet depends_on (a blocker a run reported); finish them first |
 | `task_done` | 2 | task retry: the task's PR is merged or the task is done in base |
@@ -1729,8 +1730,10 @@ base without a checkout: other staged and unstaged work in the checkout stays.
    pull request (`data.branch`, `data.pr`); base and the checkout stay as they are.
 5. Nothing to commit: `data.committed: false`.
 6. `giro config pull --json` fast-forwards the local base to the remote base
-   (`data.updated`, `data.before`, `data.after`). `base_diverged`, `dirty_base`,
-   `run_in_progress` and `no_remote` change nothing.
+   (`data.updated`, `data.before`, `data.after`), including during active runs.
+   The move is serialized against new run starts and journaled for active run guards.
+   `base_diverged`, `dirty_base`, `no_remote`, `unknown_base` and a changed
+   reviewed plan (`plan_changed`) still prevent the pull.
 
 ### Plan -> backlog
 
@@ -1947,7 +1950,7 @@ NAME] [--thinking LEVEL]] --json` continues the task's newest `failed`, `stopped
    The prompt gets a `## Continuation` section (the done phases, `context_handoff/`) and
    `--note` as `## Retry note`.
 4. Base is pulled from the remote first, like `giro config pull`; a base that cannot
-   move stops the retry with that error (`base_diverged`, `dirty_base`, `run_in_progress`)
+   move stops the retry with that error (`base_diverged`, `dirty_base`)
    and nothing changes. When base moved past the branch, the branch is rebased onto it
    (uncommitted work is committed first); a conflict is resolved like `giro task
    resolve`. When that fails the branch stays as it was and the run is `failed`. After a
