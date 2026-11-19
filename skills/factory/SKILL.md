@@ -9,12 +9,12 @@ description: >-
   multi-repository operations.
 ---
 
-# GIRO skill: driving the `giro` CLI (aifactory 1.0.32)
+# GIRO skill: driving the `giro` CLI (aifactory 1.0.33)
 
 This guide is generated from the installed code by `giro --skill`.
 Save its Markdown output as an agent's `SKILL.md`; `giro --skill --json`
 returns the same guide inside the JSON envelope. Compare `giro --version`
-with aifactory 1.0.32: whenever the version changes, regenerate this skill
+with aifactory 1.0.33: whenever the version changes, regenerate this skill
 with `giro --skill` and replace the saved copy.
 
 Goal in. Release out.
@@ -984,6 +984,7 @@ serve the local dashboard (127.0.0.1 unless --host) and open it
 | `update_unavailable` | 1 | no newer installable release is available |
 | `upgrade_failed` | 1 | upgrade: uv tool install failed (data.stdout, data.stderr); the old version stays |
 | `workflow_invalid` | 1 | workflow check found problems; see error.issues |
+| `forgejo_not_configured` | 1/2 | set GIRO_FORGEJO_URL and GIRO_FORGEJO_TOKEN |
 | `missing_backlog_dir` | 1|2 | the backlog directory <docs_root>/backlog is missing where it cannot be created (otherwise it is created silently; 1 for backlog list/check, 2 for task commands) |
 | `agent_unavailable` | 2 | the agent is missing from the roster or its harness is off |
 | `already_installed` | 2 | giro init: .factory/config.yaml is committed |
@@ -1027,7 +1028,6 @@ serve the local dashboard (127.0.0.1 unless --host) and open it
 | `follow_up_collision` | 2 | follow-up IDs could not be reconciled with base; resolve the duplicate or conflicting backlog changes and retry |
 | `follow_up_head_changed` | 2 | base changed during approval; follow-up IDs were reconciled, but the new PR head needs checks before approval can finish; retry task approve |
 | `forgejo_failed` | 2 | a Forgejo REST request failed or returned an unexpected response |
-| `forgejo_not_logged_in` | 2 | set GIRO_FORGEJO_TOKEN to a Forgejo access token |
 | `forgejo_timeout` | 2 | a Forgejo REST request timed out |
 | `gh_failed` | 2 | a gh command failed |
 | `gh_missing` | 2 | the gh CLI is not installed |
@@ -1167,7 +1167,7 @@ agent, workflow, skill or extension in the dashboard, `repo` or `library`):
 - library_sync: `unshared`, `local`, `pending`, `behind`, `synced`
 - startup: `env_file_mode`
 - library: `invalid_type`, `invalid_name`, `missing_item`, `missing_file`, `not_a_file`, `symlink`, `too_many_files`, `too_large`, `not_utf8`, `invalid_yaml`, `not_a_mapping`, `unknown_key`, `missing_purpose`, `invalid_defaults`, `unexpected_file`, `missing_skill_md`, `invalid_front_matter`, `name_mismatch`, `missing_description`, `missing_entry`
-- check: `factory_missing`, `config_not_committed`, `repo_unsupported`, `repo_installed`, `base_missing`, `checkout_not_on_base`, `remote_missing`, `remote_base_missing`, `base_behind_remote`, `base_ahead_of_remote`, `base_config_invalid`, `worktree_config_invalid`, `config_uncommitted`, `base_setting_mismatch`, `backlog_missing`, `backlog_invalid`, `workflow_unset`, `workflow_unknown`, `workflow_invalid`, `gitignore_missing`, `skill_mirror_missing`, `skill_mirror_differs`, `skill_mirror_extra`, `harness_missing`, `disallowed_commands_unenforced`, `local_config_invalid`, `local_port_ignored`, `gh_missing`, `gh_login`, `az_missing`, `az_devops_missing`, `az_login`, `hosting_skipped`, `codex_not_isolated`, `pi_not_isolated`, `unsupported_platform`, `git_missing`, `git_identity_missing`, `uv_missing`, `node_missing`, `harness_login`, `pi_model_unknown`, `env_file_mode`, `env_override`, `factory_outdated`, `library_missing`, `library_dirty`, `library_behind`, `library_unpushed`, `seed_update_available`, `roles_full_copy`, `unknown_thinking`, `check_failed`
+- check: `factory_missing`, `config_not_committed`, `repo_unsupported`, `repo_installed`, `base_missing`, `checkout_not_on_base`, `remote_missing`, `remote_base_missing`, `base_behind_remote`, `base_ahead_of_remote`, `base_config_invalid`, `worktree_config_invalid`, `config_uncommitted`, `base_setting_mismatch`, `backlog_missing`, `backlog_invalid`, `workflow_unset`, `workflow_unknown`, `workflow_invalid`, `gitignore_missing`, `skill_mirror_missing`, `skill_mirror_differs`, `skill_mirror_extra`, `harness_missing`, `disallowed_commands_unenforced`, `local_config_invalid`, `local_port_ignored`, `gh_missing`, `forgejo_not_configured`, `forgejo_invalid_config`, `gh_login`, `az_missing`, `az_devops_missing`, `az_login`, `hosting_skipped`, `codex_not_isolated`, `pi_not_isolated`, `unsupported_platform`, `git_missing`, `git_identity_missing`, `uv_missing`, `node_missing`, `harness_login`, `pi_model_unknown`, `env_file_mode`, `env_override`, `factory_outdated`, `library_missing`, `library_dirty`, `library_behind`, `library_unpushed`, `seed_update_available`, `roles_full_copy`, `unknown_thinking`, `check_failed`
 
 What to do with the common ones:
 
