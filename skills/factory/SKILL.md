@@ -9,12 +9,12 @@ description: >-
   multi-repository operations.
 ---
 
-# GIRO skill: driving the `giro` CLI (aifactory 1.0.30)
+# GIRO skill: driving the `giro` CLI (aifactory 1.0.31)
 
 This guide is generated from the installed code by `giro --skill`.
 Save its Markdown output as an agent's `SKILL.md`; `giro --skill --json`
 returns the same guide inside the JSON envelope. Compare `giro --version`
-with aifactory 1.0.30: whenever the version changes, regenerate this skill
+with aifactory 1.0.31: whenever the version changes, regenerate this skill
 with `giro --skill` and replace the saved copy.
 
 Goal in. Release out.
@@ -160,14 +160,14 @@ Check, only by reading, whether factory will run in this repository and on this 
 ### giro init
 
 ```
-giro init [--repo PATH] [--base BRANCH] [--provider {local,github,azure}] [--azure-org ORG] [--azure-project PROJECT] [--azure-repo REPO] [--docs-root DIR] [--base-changes {direct,pr}] [--base-pr-merge {manual,auto}] [--dry-run] [--commit] [--pr] [--expect DIGEST] [-m TEXT] [--force] [--json]
+giro init [--repo PATH] [--base BRANCH] [--provider {local,github,azure,forgejo}] [--azure-org ORG] [--azure-project PROJECT] [--azure-repo REPO] [--docs-root DIR] [--base-changes {direct,pr}] [--base-pr-merge {manual,auto}] [--dry-run] [--commit] [--pr] [--expect DIGEST] [-m TEXT] [--force] [--json]
 ```
 
 Install factory into a git repository that has none: .factory/config.yaml, the backlog directory and the .gitignore lines. Agents, workflows, skills and extensions are not copied: runs take them from the library in the home directory (the seed in the package without a library); a copy in .factory/ wins. Three modes. Without --dry-run and --commit the files are written to the working tree, existing files are skipped unless --force and nothing is committed. --dry-run returns the plan: files with content, blockers, warnings, digest and the detected remote, base, provider and harness CLIs (detected); it writes nothing. --commit makes the same plan one commit on base (pushed before base moves; --pr opens a pull request from factory-init/<n> instead); --expect DIGEST refuses a plan that changed (plan_changed). Blockers: already_installed (config.yaml in base), existing_config (an sssf installation; GIRO does not take it over), config_not_committed (run factory config commit), dirty_paths, invalid_plan, not_on_base, run_in_progress, base_behind, base_diverged. Nothing is written to the library.
 
 - `--repo` `PATH`: repository to install into (default: the current git repo)
 - `--base` `BRANCH`: base branch of the runs (default: the remote HEAD with --dry-run/--commit, else the current branch)
-- `--provider` `{local,github,azure}`: git provider (default: from the remote URL with --dry-run/--commit, else local) (one of `local`, `github`, `azure`)
+- `--provider` `{local,github,azure,forgejo}`: git provider (default: from the remote URL with --dry-run/--commit, else local) (one of `local`, `github`, `azure`, `forgejo`)
 - `--azure-org` `ORG`: Azure DevOps organization
 - `--azure-project` `PROJECT`: Azure DevOps project
 - `--azure-repo` `REPO`: Azure DevOps repository
@@ -1026,6 +1026,9 @@ serve the local dashboard (127.0.0.1 unless --host) and open it
 | `file_exists` | 2 | the task file or the project/step directory already exists |
 | `follow_up_collision` | 2 | follow-up IDs could not be reconciled with base; resolve the duplicate or conflicting backlog changes and retry |
 | `follow_up_head_changed` | 2 | base changed during approval; follow-up IDs were reconciled, but the new PR head needs checks before approval can finish; retry task approve |
+| `forgejo_failed` | 2 | a Forgejo REST request failed or returned an unexpected response |
+| `forgejo_not_logged_in` | 2 | set GIRO_FORGEJO_TOKEN to a Forgejo access token |
+| `forgejo_timeout` | 2 | a Forgejo REST request timed out |
 | `gh_failed` | 2 | a gh command failed |
 | `gh_missing` | 2 | the gh CLI is not installed |
 | `gh_timeout` | 2 | a gh command exceeded its timeout; retry the operation |
@@ -1338,7 +1341,7 @@ Every key, including nested entries, is generated from the configuration model.
 | `worktrees_dir` | `".factory/worktrees"` | Directory for isolated task worktrees, relative to the repository. |
 | `base` | `"main"` | Base branch whose committed configuration and backlog runs read. |
 | `remote` | `"origin"` | Git remote used for publishing and synchronizing base. |
-| `git_provider` | `"local"` | Hosting provider: local (no PR hosting), github (gh), or azure (az). |
+| `git_provider` | `"local"` | Hosting provider: local, github (gh), azure (az), or forgejo (REST). |
 | `merge_strategy` | `"squash"` | Strategy for merging approved task pull requests. |
 | `wait_for_ci` | `true` | Wait up to 90 seconds for absent CI checks to appear before merging a task PR. False skips only this grace period; pending/failing checks and head verification remain enforced. |
 | `base_changes` | `"direct"` | How factory changes base (install, configuration, library items, backlog, uninstall): direct commits pushed to base, or pr, one pull request per change for a base that takes changes only through pull requests. |
@@ -1648,8 +1651,10 @@ one commit, after the user has seen the plan.
      branch), `provider` (`github`, `azure` with `azure.organization`, `project` and
      `repository`, or `local`) and `harnesses` (`installed` and `path` per harness CLI).
    Options:
-   - `--base BRANCH` and `--provider local|github|azure`. Azure takes `--azure-org`,
+   - `--base BRANCH` and `--provider local|github|azure|forgejo`. Azure takes `--azure-org`,
      `--azure-project` and `--azure-repo`, each falling back to the remote URL.
+     Forgejo uses the configured Git remote and the operator's `GIRO_FORGEJO_URL`
+     and `GIRO_FORGEJO_TOKEN` environment variables.
    - `--docs-root DIR` (default `factory`). `$specs_dir/` and `$docs_dir/` in `writes`
      become `<docs_root>/specs/` and `<docs_root>/docs/`.
    - `--pr` plans a pull request; the direct-only blockers then do not apply.
