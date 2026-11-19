@@ -37,6 +37,10 @@ Time limit for all checks together: {{test_timeout}} seconds.
 
 In scoped rounds retain failed/unexecuted and affected checks; green unaffected checks and the deferred whole suite need no repeated `dropped` reason. Correct a broken command
 when necessary; never weaken a check because it caught a real defect.
+If a failed check's `argv` changes, keep its exact name in `checks` and add
+`dropped: [{"name": "<same name>", "reason": "<why the command changed>"}]`.
+A `dropped` entry alone cannot remove a failed check. The exception is narrowing
+a failed full suite to a scoped regression under the same name: no `dropped` entry is needed.
 
 ## Handoff directory
 
