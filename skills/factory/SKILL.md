@@ -9,12 +9,12 @@ description: >-
   multi-repository operations.
 ---
 
-# GIRO skill: driving the `giro` CLI (aifactory 1.0.40)
+# GIRO skill: driving the `giro` CLI (aifactory 1.0.41)
 
 This guide is generated from the installed code by `giro --skill`.
 Save its Markdown output as an agent's `SKILL.md`; `giro --skill --json`
 returns the same guide inside the JSON envelope. Compare `giro --version`
-with aifactory 1.0.40: whenever the version changes, regenerate this skill
+with aifactory 1.0.41: whenever the version changes, regenerate this skill
 with `giro --skill` and replace the saved copy.
 
 Goal in. Release out.
