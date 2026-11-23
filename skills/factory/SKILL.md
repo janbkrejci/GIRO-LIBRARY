@@ -9,12 +9,12 @@ description: >-
   multi-repository operations.
 ---
 
-# GIRO skill: driving the `giro` CLI (aifactory 1.0.35)
+# GIRO skill: driving the `giro` CLI (aifactory 1.0.40)
 
 This guide is generated from the installed code by `giro --skill`.
 Save its Markdown output as an agent's `SKILL.md`; `giro --skill --json`
 returns the same guide inside the JSON envelope. Compare `giro --version`
-with aifactory 1.0.35: whenever the version changes, regenerate this skill
+with aifactory 1.0.40: whenever the version changes, regenerate this skill
 with `giro --skill` and replace the saved copy.
 
 Goal in. Release out.
@@ -1003,7 +1003,7 @@ serve the local dashboard (127.0.0.1 unless --host) and open it
 | `base_moved` | 2 | base moved on the remote during the operation |
 | `branch_checked_out` | 2 | the branch is checked out in another worktree |
 | `bundle_invalid` | 2 | upgrade: the bundle is missing, not a zip or lacks a file |
-| `busy` | 2 | dashboard API: another apply or base pull runs in this repository, or another global library write is running (HTTP 409) |
+| `busy` | 2 | dashboard API: another apply or base pull runs in this repository, or another global library write is running, or the screen already has a subscriber (HTTP 409) |
 | `chain_running` | 2 | the chain is still running and cannot be dismissed |
 | `checks_head_unconfirmed` | 2 | CI head could not be confirmed; the pull request stays open |
 | `checksum_mismatch` | 2 | upgrade: a file of the bundle differs from SHA256SUMS |
@@ -1111,6 +1111,8 @@ serve the local dashboard (127.0.0.1 unless --host) and open it
 | `run_running` | 2 | the run is still running and cannot be archived |
 | `run_worktree` | 2 | dashboard API: the path is a worktree of a task run (HTTP 422) |
 | `runs_active` | 2 | stop active runs and writers before migration |
+| `screen_disabled` | 2 | dashboard API: screen capture requires a loopback server and client (HTTP 403) |
+| `screen_unsupported` | 2 | dashboard API: screen capture is unavailable; see data.reason (HTTP 501) |
 | `self_ref` | 2 | a task cannot reference itself |
 | `skills_sync_failed` | 2 | giro skills sync could not write .agents/skills |
 | `stacked_on_open_pr` | 2 | the PR builds on a dependency's open PR; it is rebased onto base after that merge |
